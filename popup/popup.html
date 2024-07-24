@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+    <title>Image Exif Data Remover</title>
+    <!--Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon_32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon_16x16.png">
+    <!--End of Favicon-->
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="/src/lib/css/bulma.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
+    <!--End of CSS-->
+</head>
+
+<body id="mainBody">
+    <main class="mx-2 my-2">
+        <section id="droppableSection"
+            class="box is-flex is-flex-direction-column is-justify-content-center is-align-content-flex-start">
+            <div class="ds-primary column is-1">
+                <h1 class="has-text-light has-background-primary-dark has-text-centered is-size-4 px-2 py-2"><span
+                        class="has-text-weight-bold">Drop</span> or <span class="has-text-weight-bold">Upload</span>
+                    your Image here:</h1>
+            </div>
+            <div class="ds-secondary column is-1">
+                <div class="box upload-area has-background-primary-10 has-text-primary-10-invert" id="uploadFile">
+                </div>
+                <div>
+                    <button id="uploadImage"
+                        class="ds-upload-button container box is-flex is-flex-direction-row is-justify-content-center is-align-content-center has-text-light has-background-primary-dark has-text-centered is-size-5 column is-1">
+                        <i class="bi bi-upload"></i> Upload Image
+                    </button>
+                    <input type="file" id="theFile" style="display: none;">
+                </div>
+            </div>
+        </section>
+    </main>
+    <!--Scripts-->
+    <script src="/src/app.js"></script>
+    <script src="/src/background/service_worker.js"></script>
+    <!--Library Scripts-->
+    <script src="/src/lib/js/jquery-3.7.1.min.js"></script>
+    <script src="/src//lib/js/lite.umd.js" type="module"></script>
+    <!--End of Library Scripts-->
+    <!--End of Scripts-->
+</body>
+
+</html>

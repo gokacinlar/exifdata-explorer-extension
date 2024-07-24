@@ -1,0 +1,10 @@
+{
+    "extensionName": {
+        "message": "Exif Data Remover",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "Remove Exif Data from your images without leaving the browser.",
+        "description": "Description of the extension."
+    }
+}
