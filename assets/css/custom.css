@@ -26,6 +26,10 @@
     overflow: hidden;
 }
 
+.upload-area:hover {
+    cursor: not-allowed;
+}
+
 .upload-area::before {
     content: "Image goes here...";
     display: flex;
