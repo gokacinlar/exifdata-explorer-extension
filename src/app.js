@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", function () {
 let acceptableImageTypes = ["image/jpeg", "image/png", "image/webp"]; // Define the MIME types
 let isImageExists = false;
 
+function initFunctions() {
+    getImageOrigin();
+    limitImageTypes();
+    dragAndDropImage();
+}
+
 let imageCss = {
     width: "100%",
     height: "auto",
@@ -13,12 +19,6 @@ let imageCss = {
     inset: "0",
     position: "absolute",
     zIndex: "2"
-}
-
-function initFunctions() {
-    getImageOrigin();
-    limitImageTypes();
-    dragAndDropImage();
 }
 
 function getImageOrigin() {
@@ -49,6 +49,8 @@ function getImageOrigin() {
         }).css(imageCss);
 
         // Append the image to the upload area
+        // and check if user attempt to upload
+        // another one
         if (!isImageExists) {
             uploadFileDiv.append(img);
             addRemoveImageBtn();
@@ -115,6 +117,7 @@ function addRemoveImageBtn() {
 function removeRemoveBtnAndReset() {
     $removeBtn.remove();
     $("#uploadFile").empty();
+    isImageExists = false; // Return to the inital stage of upload div's empty state
 }
 
 function openFileExplorer() {
