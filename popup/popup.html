@@ -19,13 +19,13 @@
 <body id="mainBody" class="has-background-primary-05">
     <main class="mx-2 py-2">
         <section id="droppableSection"
-            class="box is-flex is-flex-direction-column is-justify-content-center is-align-content-flex-start">
-            <div class="ds-primary column is-1">
+            class="ds-main box is-flex is-flex-direction-column is-justify-content-center is-align-content-center">
+            <div class="ds-primary column is-centered is-1">
                 <h1 class="has-text-light has-background-primary-dark has-text-centered is-size-4 px-2 py-2"><span
                         class="has-text-weight-bold">Drop</span> or <span class="has-text-weight-bold">Upload</span>
                     your Image here:</h1>
             </div>
-            <div id="uploadSection" class="ds-secondary column is-1">
+            <div id="uploadSection" class="ds-secondary column is-centered is-1">
                 <div class="box upload-area has-background-primary-10 has-text-primary-10-invert" id="uploadFile">
                 </div>
                 <div>
@@ -34,6 +34,16 @@
                         <i class="bi bi-upload"></i> Upload Image
                     </button>
                     <input type="file" id="theFile" style="display: none;">
+                </div>
+                <div id="actionsSection"
+                    class="ds-action-btns is-flex is-flex-direction-column is-justify-content-center is-align-content-center">
+                    <div id="asPrimary"
+                        class="ds-action-primary is-flex is-flex-direction-row is-justify-content-center is-align-content-center">
+
+                    </div>
+                    <div id="asSecondary" class="ds-action-secondary">
+
+                    </div>
                 </div>
             </div>
         </section>

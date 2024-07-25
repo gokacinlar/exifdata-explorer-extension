@@ -9,7 +9,11 @@
 
 #mainBody {
     width: 512px;
-    height: 512px;
+    height: fit-content;
+}
+
+.ds-main {
+    width: 100%;
 }
 
 .ds-primary>h1 {
@@ -18,6 +22,16 @@
 
 .ds-upload-button {
     gap: .55em;
+}
+
+.ds-action-btns {
+    align-content: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.ds-action-primary {
+    gap: .75em;
 }
 
 .upload-area {
