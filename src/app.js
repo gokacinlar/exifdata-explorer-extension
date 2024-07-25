@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initFunctions();
 });
 
-let acceptableImageTypes = ["image/jpeg", "image/png", "image/webp"]; // Define the MIME types
+let acceptableImageTypes = ["image/jpeg", "image/png", "image/heic", "image/avif"]; // Define the MIME types
 let isImageExists = false;
 
 function initFunctions() {
@@ -18,8 +18,8 @@ let imageCss = {
     margin: "0",
     inset: "0",
     position: "absolute",
-    zIndex: "2"
-}
+    zIndex: "2",
+};
 
 function getImageOrigin() {
     const fileUploadBtn = $("#uploadImage");
@@ -45,21 +45,20 @@ function getImageOrigin() {
         const img = $("<img>").attr({
             src: URL.createObjectURL(file),
             alt: file.name,
-            class: "uploaded-image"
+            class: "uploaded-image",
         }).css(imageCss);
 
         // Append the image to the upload area
-        // and check if user attempt to upload
-        // another one
+        // and check if user attempt to upload another one
         if (!isImageExists) {
             uploadFileDiv.append(img);
             addRemoveImageBtn();
             listExifDataBtn();
             isImageExists = true;
+            readExifData(file);
         }
     });
 }
-
 
 function dragAndDropImage() {
     // Add and remove dragover events to accompany user input
@@ -88,7 +87,7 @@ function dragAndDropImage() {
         const img = $("<img>").attr({
             src: URL.createObjectURL(file),
             alt: file.name,
-            class: "uploaded-image"
+            class: "uploaded-image",
         }).css(imageCss);
 
         // Append the image to the upload area
@@ -97,8 +96,29 @@ function dragAndDropImage() {
             addRemoveImageBtn();
             listExifDataBtn();
             isImageExists = true;
+            readExifData(file);
         }
     });
+}
+
+/**
+ * Main function to READ exif data
+ */
+
+// fixme
+function readExifData(file) {
+    exifr.parse(file)
+        .then(output => {
+            if (output && output.Make) {
+                console.log("Exif Data:", output.Make, output.Model);
+                // We will access EXIF data here
+            } else {
+                console.error("EXIF data not found or incomplete.");
+            }
+        })
+        .catch(error => {
+            console.error("Error reading EXIF data:", error);
+        });
 }
 
 /**
@@ -110,23 +130,20 @@ let $listExifDataBtn;
 let $btnCss = ["box has-text-light has-background-primary-dark has-text-centered is-size-5 column my-0"];
 
 function addRemoveImageBtn() {
-    let $removeBtnContent = ["<i class='bi bi-arrow-clockwise'></i> Remove Image"]
+    let $removeBtnContent = ["<i class='bi bi-arrow-clockwise'></i> Remove Image"];
 
     $removeBtn = $("<button>");
-    $removeBtn.html($removeBtnContent)
-        .attr("class", $btnCss);
+    $removeBtn.html($removeBtnContent).attr("class", $btnCss);
     $("#asPrimary").append($removeBtn);
 
     $($removeBtn).on("click", removeBtnsAndReset);
 }
 
 function listExifDataBtn() {
-    let $exifDataBtnContent = ["<i class='bi bi-journal-arrow-up'></i> List Exif Data"]
+    let $exifDataBtnContent = ["<i class='bi bi-journal-arrow-up'></i> List Exif Data"];
 
     $listExifDataBtn = $("<button>");
-    $listExifDataBtn.html($exifDataBtnContent)
-        .attr("class", $btnCss);
-
+    $listExifDataBtn.html($exifDataBtnContent).attr("class", $btnCss);
     $("#asPrimary").append($listExifDataBtn);
 }
 
@@ -150,7 +167,7 @@ function limitImageTypes() {
     // Abort the function if user input doesn't include acceptableImageTypes
     $(fileInput).on("change", function () {
         if (!acceptableImageTypes.includes(this.files[0].type)) {
-            alert("Invalid image type. Please select a JPEG, PNG, or WEBP image.");
+            alert("Invalid image type. Please select a JPEG, PNG or HEIC image.");
             console.error("Invalid image type:", file.type);
             return;
         }
