@@ -54,6 +54,7 @@ function getImageOrigin() {
         if (!isImageExists) {
             uploadFileDiv.append(img);
             addRemoveImageBtn();
+            listExifDataBtn();
             isImageExists = true;
         }
     });
@@ -93,7 +94,8 @@ function dragAndDropImage() {
         // Append the image to the upload area
         if (!isImageExists) {
             $("#uploadFile").append(img);
-            addRemoveImageBtn()
+            addRemoveImageBtn();
+            listExifDataBtn();
             isImageExists = true;
         }
     });
@@ -104,20 +106,37 @@ function dragAndDropImage() {
  */
 
 let $removeBtn;
-let $removeBtnCss = ["box has-text-light has-background-primary-dark has-text-centered is-size-6 column is-1"];
+let $listExifDataBtn;
+let $btnCss = ["box has-text-light has-background-primary-dark has-text-centered is-size-5 column my-0"];
 
 function addRemoveImageBtn() {
+    let $removeBtnContent = ["<i class='bi bi-arrow-clockwise'></i> Remove Image"]
+
     $removeBtn = $("<button>");
-    $removeBtn.html("<i class='bi bi-arrow-clockwise'></i> Remove Image")
-        .attr("class", $removeBtnCss);
-    $("#uploadSection").append($removeBtn);
-    $($removeBtn).on("click", removeRemoveBtnAndReset);
+    $removeBtn.html($removeBtnContent)
+        .attr("class", $btnCss);
+    $("#asPrimary").append($removeBtn);
+
+    $($removeBtn).on("click", removeBtnsAndReset);
 }
 
-function removeRemoveBtnAndReset() {
+function listExifDataBtn() {
+    let $exifDataBtnContent = ["<i class='bi bi-journal-arrow-up'></i> List Exif Data"]
+
+    $listExifDataBtn = $("<button>");
+    $listExifDataBtn.html($exifDataBtnContent)
+        .attr("class", $btnCss);
+
+    $("#asPrimary").append($listExifDataBtn);
+}
+
+function removeBtnsAndReset() {
     $removeBtn.remove();
-    $("#uploadFile").empty();
+    $listExifDataBtn.remove();
+
     isImageExists = false; // Return to the inital stage of upload div's empty state
+
+    $("#uploadFile").empty();
 }
 
 function openFileExplorer() {
