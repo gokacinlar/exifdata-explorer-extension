@@ -14,4 +14,4 @@ This is a browser extension that aims to let users remove Exif Data from images 
 ## JavaScript Libraries Used
 
 - jQuery 3.7.1
-- ExifR
+- ExifJS
