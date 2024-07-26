@@ -21,10 +21,10 @@ let imageCss = {
     zIndex: "2",
 };
 
-function getImageOrigin() {
-    const fileUploadBtn = $("#uploadImage");
-    const uploadFileDiv = $("#uploadFile");
+const fileUploadBtn = $("#uploadImage");
+const uploadFileDiv = $("#uploadFile");
 
+function getImageOrigin() {
     $(fileUploadBtn).on("click", function () {
         $("#theFile").trigger("click"); // Trigger click on hidden file input
     });
@@ -55,24 +55,24 @@ function getImageOrigin() {
             addRemoveImageBtn();
             listExifDataBtn();
             isImageExists = true;
-            readExifData(file);
+            window.onload = getExif(file);
         }
     });
 }
 
 function dragAndDropImage() {
     // Add and remove dragover events to accompany user input
-    $("#uploadFile").on("dragover", function (e) {
+    $(uploadFileDiv).on("dragover", function (e) {
         e.preventDefault();
         $(this).addClass("dragover");
     });
 
-    $("#uploadFile").on("dragleave", function () {
+    $(uploadFileDiv).on("dragleave", function () {
         $(this).removeClass("dragover");
     });
 
     // Append the dropped image to the uploadFile div
-    $("#uploadFile").on("drop", function (e) {
+    $(uploadFileDiv).on("drop", function (e) {
         e.preventDefault();
         $(this).removeClass("dragover");
 
@@ -92,11 +92,11 @@ function dragAndDropImage() {
 
         // Append the image to the upload area
         if (!isImageExists) {
-            $("#uploadFile").append(img);
+            $(uploadFileDiv).append(img);
             addRemoveImageBtn();
             listExifDataBtn();
             isImageExists = true;
-            readExifData(file);
+            window.onload = getExif(file);
         }
     });
 }
@@ -105,20 +105,26 @@ function dragAndDropImage() {
  * Main function to READ exif data
  */
 
+// make, model & allMetaData returns null and undefined
 // fixme
-function readExifData(file) {
-    exifr.parse(file)
-        .then(output => {
-            if (output && output.Make) {
-                console.log("Exif Data:", output.Make, output.Model);
-                // We will access EXIF data here
+// Use async function to get Exif Data from the passed parameter
+async function getExif(file) {
+    try {
+        await EXIF.getData(file, () => {
+            if (file) {
+                var make = EXIF.getTag(this, "Make");
+                var model = EXIF.getTag(this, "Model");
+                var allMetaData = EXIF.pretty(this);
+
+                console.log(JSON.stringify(allMetaData, null, "\t"));
+                console.log(make, model);
             } else {
                 console.error("EXIF data not found or incomplete.");
             }
-        })
-        .catch(error => {
-            console.error("Error reading EXIF data:", error);
         });
+    } catch (error) {
+        console.error("Error reading EXIF data", error);
+    }
 }
 
 /**
@@ -153,7 +159,7 @@ function removeBtnsAndReset() {
 
     isImageExists = false; // Return to the inital stage of upload div's empty state
 
-    $("#uploadFile").empty();
+    $(uploadFileDiv).empty();
 }
 
 function openFileExplorer() {
