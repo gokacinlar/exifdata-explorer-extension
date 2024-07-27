@@ -108,18 +108,19 @@ function dragAndDropImage() {
 // make, model & allMetaData returns null and undefined
 // fixme
 // Use async function to get Exif Data from the passed parameter
-async function getExif(file) {
+
+function getExif(file) {
     try {
-        await EXIF.getData(file, () => {
+        EXIF.getData(file, function () {
             if (file) {
                 var make = EXIF.getTag(this, "Make");
                 var model = EXIF.getTag(this, "Model");
                 var allMetaData = EXIF.pretty(this);
 
-                console.log(JSON.stringify(allMetaData, null, "\t"));
+                console.log(JSON.stringify(allMetaData, null, 2));
                 console.log(make, model);
             } else {
-                console.error("EXIF data not found or incomplete.");
+                console.error("EXIF data has not been found or incomplete.");
             }
         });
     } catch (error) {
