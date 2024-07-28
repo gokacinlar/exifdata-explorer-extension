@@ -9,11 +9,7 @@
 
 #mainBody {
     width: 512px;
-    height: fit-content;
-}
-
-.ds-main {
-    width: 100%;
+    height: fit-content !important;
 }
 
 .ds-primary>h1 {
@@ -35,7 +31,7 @@
 }
 
 .upload-area {
-    height: 256px;
+    min-height: 320px;
     position: relative;
     overflow: hidden;
 }
