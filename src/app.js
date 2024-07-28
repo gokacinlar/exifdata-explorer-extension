@@ -61,6 +61,7 @@ function displayImage(file) {
 /**
  * Main function to read EXIF data using Exif.js library
  * https://github.com/exif-js/exif-js
+ * included in the HTML file (popup.html)
  */
 
 function getExif(file) {
@@ -69,6 +70,14 @@ function getExif(file) {
             const make = EXIF.getTag(this, "Make");
             const model = EXIF.getTag(this, "Model");
             const allMetaData = EXIF.pretty(this);
+
+            if (!make && !model && !allMetaData) {
+                alert("No EXIF data has been found.");
+                return;
+            } else if (!make || !model) {
+                alert("Partial EXIF data has been detected.");
+            }
+
             console.log(allMetaData);
             console.log({
                 "Device Model": model,
