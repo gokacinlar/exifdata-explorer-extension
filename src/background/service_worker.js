@@ -9,9 +9,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Listen for Exif Data and append the Exif Data content to the
     // newly created "exif-data.html"
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.exifData) {
-            $("#rawExifData")
-                .append(JSON.stringify(message.exifData, null, 2));
+        try {
+            if (message.exifData && message.imageUrl) {
+                $("#rawExifData")
+                    .append(JSON.stringify(message.exifData, null, 2));
+                $("#exifImgSource")
+                    .attr("src", message.imageUrl)
+                    .css({
+                        "margin-bottom": "1rem"
+                    });
+            }
+        } catch (error) {
+            console.error("Error retrieving Exif Data:", error);
         }
     });
 });

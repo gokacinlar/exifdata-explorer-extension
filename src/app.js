@@ -18,7 +18,8 @@ const $fileUploadBtn = $("#uploadImage");
 const $uploadFileDiv = $("#uploadFile");
 const $fileInput = $("#theFile");
 
-let exifData = {}; // Store EXIF data globally to later append it to newly created tab
+// Store EXIF data globally to later append it to newly created tab
+let exifData = {};
 
 function initFunctions() {
     setupEventListeners();
@@ -39,15 +40,22 @@ function setupEventListeners() {
         .on("drop", handleDrop);
 }
 
+// Add a global variable to store the current image URL
+// NOTE: If you use it inside the displayImage function scope,
+// it won't be accessible to chrome.tabs.sendMessage API
+let currentImageUrl = "";
+
 function displayImage(file) {
     if (!isImageExists) {
-        const img = $("<img>").attr({
-            src: URL.createObjectURL(file),
+        // Store the image uploaded to later append it to newly created tab
+        currentImageUrl = URL.createObjectURL(file); // Store the image URL
+        const imgExif = $("<img>").attr({
+            src: currentImageUrl,
             alt: file.name,
             class: "uploaded-image"
         }).css(imageCss);
 
-        $uploadFileDiv.append(img);
+        $uploadFileDiv.append(imgExif);
 
         addRemoveImageBtn();
         listExifDataBtn();
@@ -149,11 +157,11 @@ function listExifDataBtn() {
     $listExifDataBtn.on("click", function () {
         chrome.tabs.create({ url: "/src/exif-data.html" }, (tab) => {
             console.log("New tab has been created:", tab);
-            // Send EXIF data to the new tab "exif-data.html"
+            // Send EXIF data and image URL to the new tab "exif-data.html"
             chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                 if (tabId === tab.id && changeInfo.status === "complete") {
                     chrome.tabs.onUpdated.removeListener(listener); // Remove listener after sending data
-                    chrome.tabs.sendMessage(tab.id, { exifData: exifData });
+                    chrome.tabs.sendMessage(tab.id, { exifData: exifData, imageUrl: currentImageUrl }); // Use currentImageUrl
                 }
             });
         });
