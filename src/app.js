@@ -149,16 +149,15 @@ function listExifDataBtn() {
     $listExifDataBtn.on("click", function () {
         chrome.tabs.create({ url: "/src/exif-data.html" }, (tab) => {
             console.log("New tab has been created:", tab);
-            // Send EXIF data to the new tab
-            chrome.tabs.executeScript(tab.id, {
-                function: appendExifDataToNewTab
+            // Send EXIF data to the new tab "exif-data.html"
+            chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+                if (tabId === tab.id && changeInfo.status === "complete") {
+                    chrome.tabs.onUpdated.removeListener(listener); // Remove listener after sending data
+                    chrome.tabs.sendMessage(tab.id, { exifData: exifData });
+                }
             });
         });
     });
-}
-
-function appendExifDataToNewTab() {
-    `document.body.innerHTML = '<pre>${JSON.stringify(exifData, null, 2)}</pre>';`
 }
 
 function removeBtnsAndReset() {

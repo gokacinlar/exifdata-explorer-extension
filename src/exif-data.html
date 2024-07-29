@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+    <title>Displayed Exif Data:</title>
+    <!--Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon_32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon_16x16.png">
+    <!--End of Favicon-->
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="/src/lib/css/bulma.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
+    <!--End of CSS-->
+</head>
+
+<body>
+    <section class="section is-fullheight">
+        <div class="container is-fluid py-5">
+            <div class="columns">
+                <div class="column is-3 p-3">
+                    <aside class="box">
+                        <h1 class="is-size-2 has-text-white mb-4">Actions:</h1>
+                        <div
+                            class="buttons is-flex is-flex-direction-column is-justify-content-flex-start is-align-items-stretch">
+                            <button class="button is-success is-spaced">Remove Exif Data</button>
+                            <button class="button is-light is-spaced">Save Image</button>
+                            <button class="button is-danger is-spaced">Abort Process</button>
+                        </div>
+                    </aside>
+                </div>
+                <div class="column is-9">
+                    <div class="box p-5">
+                        <main id="exifDiv" class="content">
+                            <div id="exifImgSource">
+                                <h2 class="title is-4">Your Image:</h2>
+                            </div>
+                            <div id="exifToBeDisplayed">
+                                <h2 class="title is-4">Image Exif Data:</h2>
+                                <pre id="rawExifData"></pre>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Scripts-->
+    <!--Library Scripts-->
+    <script src="/src/lib/js/jquery-3.7.1.min.js"></script>
+    <!--End of Library Scripts-->
+    <script src="/src/app.js"></script>
+    <script src="/src/background/service_worker.js"></script>
+    <!--End of Scripts-->
+</body>
+
+</html>

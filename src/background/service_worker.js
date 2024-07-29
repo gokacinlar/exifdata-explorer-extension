@@ -3,7 +3,18 @@
  * Used framework: Bulma
  */
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", function () {
+    init();
+
+    // Listen for Exif Data and append the Exif Data content to the
+    // newly created "exif-data.html"
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.exifData) {
+            $("#rawExifData")
+                .append(JSON.stringify(message.exifData, null, 2));
+        }
+    });
+});
 
 function init() {
     const dropSection = $("#droppableSection");
