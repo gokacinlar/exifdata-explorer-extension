@@ -18,6 +18,8 @@ const $fileUploadBtn = $("#uploadImage");
 const $uploadFileDiv = $("#uploadFile");
 const $fileInput = $("#theFile");
 
+let exifData = {}; // Store EXIF data globally to later append it to newly created tab
+
 function initFunctions() {
     setupEventListeners();
     limitImageTypes();
@@ -50,11 +52,10 @@ function displayImage(file) {
         addRemoveImageBtn();
         listExifDataBtn();
 
-        window.onload = getExif(file);
+        getExif(file); // Call getExif without window.onload
 
         isImageExists = true;
-        $fileUploadBtn.prop("disabled", true)
-            .css("cursor", "not-allowed");
+        $fileUploadBtn.prop("disabled", true).css("cursor", "not-allowed");
     }
 }
 
@@ -71,6 +72,13 @@ function getExif(file) {
             const model = EXIF.getTag(this, "Model");
             const allMetaData = EXIF.pretty(this);
 
+            console.log(allMetaData);
+            exifData = {
+                "Device Model": model || "N/A",
+                "Manufacturer": make || "N/A",
+                "All Metadata": allMetaData || "No EXIF data found."
+            };
+
             if (!make && !model && !allMetaData) {
                 alert("No EXIF data has been found.");
                 return;
@@ -78,20 +86,12 @@ function getExif(file) {
                 alert("Partial EXIF data has been detected.");
             }
 
-            console.log(allMetaData);
-            console.log({
-                "Device Model": model,
-                "Manufacturer": make
-            });
+            console.log(exifData);
         });
     } catch (error) {
         console.error("Error reading EXIF data", error);
     }
 }
-
-/**
- * Helper Functions
- */
 
 function handleFileSelect() {
     const file = this.files[0];
@@ -104,7 +104,6 @@ function handleFileSelect() {
         return;
     }
 }
-
 
 // Functions to handle drag, drop events & appending target image to
 // selected div
@@ -145,8 +144,21 @@ function listExifDataBtn() {
     const $listExifDataBtn = $("<button>").html("<i class='bi bi-journal-arrow-up'></i> List Exif Data")
         .attr("class", btnCss);
 
-    $("#asPrimary")
-        .append($listExifDataBtn);
+    $("#asPrimary").append($listExifDataBtn);
+
+    $listExifDataBtn.on("click", function () {
+        chrome.tabs.create({ url: "/src/exif-data.html" }, (tab) => {
+            console.log("New tab has been created:", tab);
+            // Send EXIF data to the new tab
+            chrome.tabs.executeScript(tab.id, {
+                function: appendExifDataToNewTab
+            });
+        });
+    });
+}
+
+function appendExifDataToNewTab() {
+    `document.body.innerHTML = '<pre>${JSON.stringify(exifData, null, 2)}</pre>';`
 }
 
 function removeBtnsAndReset() {
