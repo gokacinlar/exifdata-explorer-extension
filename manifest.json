@@ -23,7 +23,9 @@
     ],
     "permissions": [
         "scripting",
-        "activeTab"
+        "activeTab",
+        "tabs",
+        "storage"
     ],
     "action": {
         "default_popup": "popup/popup.html",
