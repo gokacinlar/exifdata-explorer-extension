@@ -10,7 +10,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // newly created "exif-data.html"
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         try {
-            if (message.exifData && message.imageUrl) {
+            if (message.exifData && message.imageUrl && message.imgExifAlt) { // Ensure the key matches
+                $("title")
+                    .append(`\n ${message.imgExifAlt}`)
+                $("#exifImageName")
+                    .append(`Your Image: ${message.imgExifAlt}`);
                 $("#rawExifData")
                     .append(JSON.stringify(message.exifData, null, 2));
                 $("#exifImgSource")
@@ -18,6 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     .css({
                         "margin-bottom": "1rem"
                     });
+                // You can also use message.imgExifAlt here if needed
+            } else {
+                alert("No Exif Data has been received.");
+                console.error("No Exif Data has been received.")
             }
         } catch (error) {
             console.error("Error retrieving Exif Data:", error);

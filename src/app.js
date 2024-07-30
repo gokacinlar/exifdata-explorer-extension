@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", initFunctions);
 
-const acceptableImageTypes = ["image/jpeg", "image/png", "image/heic", "image/avif"];
+const acceptableImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/heic", "image/gif, image/x-panasonic-raw"];
 // Declare a flag to later check the input state of the uploadDiv
 let isImageExists = false;
 
@@ -44,14 +44,16 @@ function setupEventListeners() {
 // NOTE: If you use it inside the displayImage function scope,
 // it won't be accessible to chrome.tabs.sendMessage API
 let currentImageUrl = "";
+let currentImageName = "";
 
 function displayImage(file) {
     if (!isImageExists) {
         // Store the image uploaded to later append it to newly created tab
         currentImageUrl = URL.createObjectURL(file); // Store the image URL
+        currentImageName = file.name;
         const imgExif = $("<img>").attr({
             src: currentImageUrl,
-            alt: file.name,
+            alt: currentImageName || "default-img",
             class: "uploaded-image"
         }).css(imageCss);
 
@@ -78,21 +80,13 @@ function getExif(file) {
         EXIF.getData(file, function () {
             const make = EXIF.getTag(this, "Make");
             const model = EXIF.getTag(this, "Model");
-            const allMetaData = EXIF.pretty(this);
+            const allMetaData = EXIF.getAllTags(this);
 
-            console.log(allMetaData);
             exifData = {
                 "Device Model": model || "N/A",
                 "Manufacturer": make || "N/A",
-                "All Metadata": allMetaData || "No EXIF data found."
+                "All Metadata": allMetaData && Object.keys(allMetaData).length > 0 ? allMetaData : "No EXIF data has been found."
             };
-
-            if (!make && !model && !allMetaData) {
-                alert("No EXIF data has been found.");
-                return;
-            } else if (!make || !model) {
-                alert("Partial EXIF data has been detected.");
-            }
 
             console.log(exifData);
         });
@@ -100,6 +94,7 @@ function getExif(file) {
         console.error("Error reading EXIF data", error);
     }
 }
+
 
 function handleFileSelect() {
     const file = this.files[0];
@@ -157,11 +152,16 @@ function listExifDataBtn() {
     $listExifDataBtn.on("click", function () {
         chrome.tabs.create({ url: "/src/exif-data.html" }, (tab) => {
             console.log("New tab has been created:", tab);
-            // Send EXIF data and image URL to the new tab "exif-data.html"
+            // Send EXIF data, image URL, and image alt to the new tab "exif-data.html"
             chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                 if (tabId === tab.id && changeInfo.status === "complete") {
                     chrome.tabs.onUpdated.removeListener(listener); // Remove listener after sending data
-                    chrome.tabs.sendMessage(tab.id, { exifData: exifData, imageUrl: currentImageUrl }); // Use currentImageUrl
+                    // Pass the required data to service_worker.js using sendMessage API
+                    chrome.tabs.sendMessage(tab.id, {
+                        exifData: exifData,
+                        imageUrl: currentImageUrl,
+                        imgExifAlt: currentImageName
+                    });
                 }
             });
         });
