@@ -6,6 +6,11 @@
 document.addEventListener("DOMContentLoaded", function () {
     init();
 
+    const warnings = {
+        noExif: "No Exif Data has been received.",
+        err: "Error retrieving Exif Data:"
+    }
+
     // Listen for Exif Data and append the Exif Data content to the
     // newly created "exif-data.html"
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -24,11 +29,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 // You can also use message.imgExifAlt here if needed
             } else {
-                alert("No Exif Data has been received.");
-                console.error("No Exif Data has been received.")
+                alert(warnings.noExif);
+                console.error(warnings.noExif);
             }
         } catch (error) {
-            console.error("Error retrieving Exif Data:", error);
+            console.error(warnings.err, error);
         }
     });
 });
