@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", initFunctions);
 
-const acceptableImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/heic", "image/gif, image/x-panasonic-raw"];
+// Define images which can have exif data with their mime types
+const acceptableImageTypes = ["image/jpeg", "image/heic", "image/tiff"];
 // Declare a flag to later check the input state of the uploadDiv
 let isImageExists = false;
 
@@ -12,6 +13,7 @@ const imageCss = {
     inset: "0",
     position: "absolute",
     zIndex: "2",
+    pointerEvents: "none"
 };
 
 const $fileUploadBtn = $("#uploadImage");
@@ -102,7 +104,7 @@ function handleFileSelect() {
         displayImage(file);
         $fileInput.val(""); // Clear file input value after selection
     } else {
-        alert("Invalid image type. Please select a JPEG, PNG, or AVIF image.");
+        alert("Invalid image type. Please select a image with JPEG, HEIC or TIFF format.");
         console.error("Invalid image type:", file.type);
         return;
     }
@@ -143,6 +145,7 @@ function addRemoveImageBtn() {
     $("#asPrimary").append($removeBtn);
 }
 
+// Function to list all Exif Data in a separate window
 function listExifDataBtn() {
     const $listExifDataBtn = $("<button>").html("<i class='bi bi-journal-arrow-up'></i> List Exif Data")
         .attr("class", btnCss);
