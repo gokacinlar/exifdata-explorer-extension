@@ -7,8 +7,8 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
     <title>Exif Data:</title>
     <!--Favicon-->
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon_32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon_16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/logo_32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/logo_16x16.png">
     <!--End of Favicon-->
     <!--CSS-->
     <link rel="stylesheet" type="text/css" href="/src/lib/css/bulma.css">
@@ -25,9 +25,8 @@
                         <h1 class="is-size-2 has-text-white mb-4">Actions:</h1>
                         <div
                             class="buttons is-flex is-flex-direction-column is-justify-content-flex-start is-align-items-stretch">
-                            <button class="button is-success is-spaced">Remove Exif Data</button>
-                            <button class="button is-light is-spaced">Save Image</button>
-                            <button class="button is-danger is-spaced">Abort Process</button>
+                            <button id="removeExif" class="button is-success is-spaced">Remove Exif Data</button>
+                            <button id="abortProcess" class="button is-danger is-spaced">Abort Process</button>
                         </div>
                     </aside>
                 </div>
@@ -54,6 +53,7 @@
     <script src="/src/lib/js/jquery-3.7.1.min.js"></script>
     <!--End of Library Scripts-->
     <script src="/src/app.js"></script>
+    <script src="/src/exif-data.js"></script>
     <script src="/src/background/service_worker.js"></script>
     <!--End of Scripts-->
 </body>
