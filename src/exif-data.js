@@ -20,19 +20,39 @@ $(document).ready(function () {
         }
     });
 
+    const imgElement = $("#exifImgSource");
     const images = $("img");
     images.attr("class", textData.imgStyling);
 
-    $("#removeExif").addEventListener("click", async () => {
-        const imgElement = $("#exifImgSource");
-        const imageUrl = imgElement.src;
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        $("#removeExif").on("click", () => {
+            const arrayBuffer = message.imageData; // This is the ArrayBuffer
+            const mimeType = message.mimeType;
 
-        // Fetch the image as a Blob
+            const blob = new Blob([arrayBuffer], { type: mimeType });
+            const fileUrl = URL.createObjectURL(blob);
+
+            // Fetch the Blob URL
+            fetch(fileUrl)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Error fetching the image blob");
+                    }
+                    return res.blob();
+                })
+                .then(blob => {
+                    return handleExifRemoval(blob);
+                })
+                .catch(error => {
+                    console.error("Error fetching the image blob:", error);
+                    alert("An error occurred while fetching the image.");
+                });
+        });
+    });
+
+    // Function to handle the EXIF removal process
+    const handleExifRemoval = async (blob) => {
         try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-
-            // Remove EXIF data from the image file
             const cleanedFile = await removeExifData(blob);
 
             // Create a new URL for the cleaned image and update the img element
@@ -40,13 +60,43 @@ $(document).ready(function () {
             imgElement.src = cleanedImageUrl;
 
             // Optionally, update the image name or any other UI elements
-            const imageName = cleanedFile.name || "cleaned_image.jpg"; // Default name if not provided
-            $("#exifImageName").textContent = `Your Image: ${imageName}`;
+            const imageName = cleanedFile.name || "image_without_exif.jpg";
+            $("#exifImageName").text(`Your Image: ${imageName}`);
+
+            // Create and append the download button dynamically
+            const downloadButton = $("<button>")
+                .attr("id", "downloadImage")
+                .addClass("button is-info is-spaced")
+                .text("Download Image")
+                .hide(); // Initially hide the button so that fadeIn animation could be displayed
+
+            // Append the button to the actions section
+            $(".buttons").append(downloadButton); // Assuming the buttons are in the same container
+
+            // Now apply fadeIn to the button
+            downloadButton.fadeIn("slow"); // Fade in the button
+
+            downloadButton.on("click", () => {
+                const url = URL.createObjectURL(cleanedFile);
+                const a = document.createElement("a");
+
+                a.href = url;
+                a.download = cleanedFile.name || "cleaned_image.jpg"; // Set the filename
+                document.body.appendChild(a);
+                a.click();
+
+                document.body.removeChild(a); // Clean up
+                URL.revokeObjectURL(url); // Free up memory
+            });
+
+            // Append the download button to the actions section
+            $(".buttons").append(downloadButton); // Assuming the buttons are in the same container
+
         } catch (error) {
             console.error("Error removing EXIF data:", error);
             alert("An error occurred while removing EXIF data.");
         }
-    });
+    };
 
     /**
      * Main Function to remove exif data from images
