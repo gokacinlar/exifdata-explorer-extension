@@ -1,10 +1,10 @@
 {
     "extensionName": {
-        "message": "Exif Data Remover",
+        "message": "Aletheia: Exif Data Explorer",
         "description": "Name of the extension."
     },
     "extensionDescription": {
-        "message": "Remove Exif Data from your images without leaving the browser.",
+        "message": "List Exif Data from your images without leaving the browser.",
         "description": "Description of the extension."
     }
 }

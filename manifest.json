@@ -1,10 +1,10 @@
 {
-    "name": "Aletheia: Exif Data Remover from Images",
+    "name": "Aletheia: Exif Data Explorer",
     "author": "Derviş Öksüzoğlu",
     "version": "1.0.0",
     "manifest_version": 3,
     "incognito": "not_allowed",
-    "description": "Remove Exif Data from your images without leaving the browser.",
+    "description": "List Exif Data from your images without leaving the browser.",
     "background": {
         "service_worker": "/src/background/service_worker.js"
     },
@@ -29,7 +29,7 @@
     ],
     "action": {
         "default_popup": "popup/popup.html",
-        "default_title": "Exif Data Remover",
+        "default_title": "Aletheia: Exif Data Explorer",
         "default_icon": {
             "16": "icons/logo_16x16.png",
             "48": "icons/logo_48x48.png"
