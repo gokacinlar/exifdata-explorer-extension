@@ -168,27 +168,6 @@ function listExifDataBtn() {
                 }
             });
         });
-
-        // Pass the Blob Object itself as ArrayBuffer to the newly created tab
-        // since passing it as a Blob URL won't work
-
-        // Create a new Blob from the image data
-        // Note: currentImageUrl should be a valid image data source (like a Blob or an ArrayBuffer)
-        const blob = new Blob([currentImageUrl], { type: "image/jpg" });
-
-        // Create a FileReader object to read the Blob
-        const reader = new FileReader();
-
-        // After the FileReader has finished reading the Blob, pass the ArrayBuffer to the tab
-        // using the sendMessage API
-        reader.onloadend = function () {
-            const arrayBuffer = reader.result; // This is an ArrayBuffer
-            chrome.runtime.sendMessage({ imageData: arrayBuffer, mimeType: "image/jpg" });
-        };
-
-        // Start reading the Blob as an ArrayBuffer
-        // This will trigger the onloadend event once the read operation is complete
-        reader.readAsArrayBuffer(blob);
     });
 }
 
@@ -204,8 +183,4 @@ function removeBtnsAndReset() {
 
 function limitImageTypes() {
     $fileInput.attr("accept", acceptableImageTypes.join(","));
-}
-
-function clearConsole() {
-    console.clear();
 }
