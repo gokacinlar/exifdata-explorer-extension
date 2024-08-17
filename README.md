@@ -1,4 +1,6 @@
-# Exif Data Explorer Extension
+# Aletheia: An Exif Data Explorer Extension
+
+![Logo](images/logo.png)
 
 This is a browser extension that aims to let users do;
 
