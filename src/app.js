@@ -7,9 +7,9 @@ let isImageExists = false;
 
 const imageCss = {
     width: "100%",
-    height: "auto",
-    objectFit: "contain",
-    margin: "0",
+    height: "100%",
+    objectFit: "cover",
+    margin: "0 auto",
     inset: "0",
     position: "absolute",
     zIndex: "2",
